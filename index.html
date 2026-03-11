@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-THR Amplop Lebaran Responsif</title>
+    <link href="https://fonts.googleapis.com/css2?family=Almendra+Display&family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green-dark: #0a2e18;
+            --green-envelope: #2e7d32;
+            --gold: #ffd700;
+            --white: #ffffff;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--green-dark);
+            color: var(--white);
+            text-align: center;
+        }
+
+        h1, h2, .ucapan {
+            font-family: 'Almendra Display', serif;
+        }
+
+        /* --- OVERLAY AWAL --- */
+        #overlay {
+            position: fixed;
+            inset: 0;
+            background-color: var(--green-dark);
+            background-image: 
+                linear-gradient(to bottom, rgba(10,46,24,0.7), rgba(10,46,24,0.95)),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 700'%3E%3Cdefs%3E%3ClinearGradient id='gold' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23ffd700' stop-opacity='0.6'/%3E%3Cstop offset='100%25' stop-color='%23ffffff' stop-opacity='0.15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M600 200 C520 200 470 260 470 340 L730 340 C730 260 680 200 600 200 Z' fill='url(%23gold)' stroke='%23ffffff' stroke-opacity='0.4' stroke-width='2'/%3E%3Crect x='420' y='340' width='360' height='180' fill='none' stroke='%23ffffff' stroke-opacity='0.4' stroke-width='2'/%3E%3Crect x='320' y='260' width='40' height='260' fill='none' stroke='%23ffffff' stroke-opacity='0.4' stroke-width='2'/%3E%3Cpath d='M340 220 L360 260 L320 260 Z' fill='url(%23gold)'/%3E%3Crect x='260' y='300' width='35' height='220' fill='none' stroke='%23ffffff' stroke-opacity='0.4' stroke-width='2'/%3E%3Cpath d='M277 270 L295 300 L260 300 Z' fill='url(%23gold)'/%3E%3Crect x='840' y='260' width='40' height='260' fill='none' stroke='%23ffffff' stroke-opacity='0.4' stroke-width='2'/%3E%3Cpath d='M860 220 L880 260 L840 260 Z' fill='url(%23gold)'/%3E%3Crect x='905' y='300' width='35' height='220' fill='none' stroke='%23ffffff' stroke-opacity='0.4' stroke-width='2'/%3E%3Cpath d='M922 270 L940 300 L905 300 Z' fill='url(%23gold)'/%3E%3Crect x='0' y='520' width='1200' height='4' fill='%23ffffff' opacity='0.25'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center bottom;
+            background-size: contain; /* Agar masjid tidak terpotong di layar lebar */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            padding: 20px;
+        }
+
+        /* Responsive Text: Menggunakan clamp() agar font mengecil di HP dan membesar di Laptop */
+        .ucapan {
+            font-size: clamp(2rem, 8vw, 3.5rem);
+            color: var(--gold);
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .input-group {
+            background: rgba(255, 255, 255, 0.1);
+            padding: clamp(20px, 5vw, 40px);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 90%;
+            max-width: 400px;
+            margin-bottom: 5vh; /* Menggunakan vh agar menyesuaikan tinggi layar */
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        button {
+            background: linear-gradient(45deg, var(--gold), #ffb300);
+            color: var(--green-dark);
+            border: none;
+            padding: 12px 40px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+        button:hover { transform: scale(1.05); }
+
+        /* --- GAME CONTAINER --- */
+        #game-container {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #greetingText { 
+            font-size: clamp(1.8rem, 6vw, 2.8rem); 
+            margin-bottom: 10px; 
+            color: var(--gold); 
+        }
+
+        .instruction { 
+            font-size: clamp(0.8rem, 3vw, 1rem);
+            margin-bottom: 40px; 
+            font-weight: 300; 
+            max-width: 80%;
+        }
+
+        /* --- AMPLOP --- */
+        .envelope-wrapper {
+            position: relative;
+            width: clamp(150px, 40vw, 220px);
+            height: clamp(90px, 25vw, 135px);
+            background: var(--green-envelope);
+            cursor: pointer;
+            animation: float 3s ease-in-out infinite;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid var(--gold);
+        }
+
+        .envelope-wrapper::after {
+            content: "Eid Mubarak";
+            font-family: 'Almendra Display';
+            color: var(--gold);
+            font-size: clamp(1rem, 3vw, 1.4rem);
+            opacity: 0.8;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: #1e5d2c;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            z-index: 2;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+
+        .open-envelope {
+            animation: openAnim 0.6s forwards;
+        }
+
+        @keyframes openAnim {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+
+        /* --- HASIL --- */
+        #result {
+            display: none;
+            width: 90%;
+            max-width: 500px;
+            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .nominal {
+            font-size: clamp(2.5rem, 10vw, 4.5rem);
+            color: var(--gold);
+            margin: 15px 0;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+        }
+
+        .rekening-info {
+            font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+            font-style: italic;
+            opacity: 0.8;
+            margin-top: 20px;
+            padding: 0 10px;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Media Query untuk Layar Sangat Lebar (Laptop/Desktop) */
+        @media (min-width: 1024px) {
+            #overlay { background-size: 60%; } /* Masjid tidak terlalu memenuhi layar di laptop */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="overlay">
+        <div class="ucapan">Selamat Hari Raya</div>
+        <div class="input-group">
+            <input type="text" id="userName" placeholder="Ketikan Nama" autocomplete="off">
+            <button onclick="handleNext()">Next</button>
+        </div>
+    </div>
+
+    <div id="game-container">
+        <h2 id="greetingText">Halo!</h2>
+        <p class="instruction" id="instructionText">Klik amplop di bawah untuk mengambil THR-mu</p>
+        
+        <div class="envelope-wrapper" id="envelope" onclick="bukaAmplop()">
+            <div class="envelope-flap"></div>
+        </div>
+
+        <div id="result">
+            <span style="font-weight: 300;">Alhamdulillah, isi amplopmu:</span>
+            <h1 class="nominal" id="displayNominal">Rp 0</h1>
+            <p class="rekening-info">"Silahkan Kirimkan No Rekening ke WA: 082126183219"</p>
+        </div>
+    </div>
+
+    <script>
+        const dataTHR = {
+            "A": "Rp 100.000",
+            "B": "Rp 50.000",
+            "C": "Rp 25.000",
+            "DEFAULT": "Rp 10.000"
+        };
+
+        let userNominal = "";
+
+        function handleNext() {
+            const name = document.getElementById('userName').value.trim();
+            if (name === "") return alert("Isi nama dulu ya!");
+
+            userNominal = dataTHR[name.toUpperCase()] || dataTHR["DEFAULT"];
+            document.getElementById('greetingText').innerText = "Halo, " + name + "!";
+            
+            document.getElementById('overlay').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('game-container').style.display = 'flex';
+            }, 600);
+        }
+
+        function bukaAmplop() {
+            const env = document.getElementById('envelope');
+            const inst = document.getElementById('instructionText');
+            
+            env.classList.add('open-envelope');
+            inst.style.display = 'none'; 
+            
+            setTimeout(() => {
+                env.style.display = 'none';
+                document.getElementById('displayNominal').innerText = userNominal;
+                document.getElementById('result').style.display = 'block';
+                document.body.style.background = "radial-gradient(circle, #1a472a, #051a0d)";
+            }, 500);
+        }
+    </script>
+</body>
+</html>
